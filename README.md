@@ -1,7 +1,7 @@
 #  Zepto Inventory Analysis using SQL
 
 <p align="center">
-  <b>SQL • MySQL • Data Cleaning • Inventory Analysis • Business Insights</b><br>
+SQL • MySQL • Data Cleaning • Inventory Analysis • Business Insights
   A portfolio project analyzing Zepto inventory data to understand pricing, discounts, stock availability, revenue potential, and inventory distribution.
 </p>
 
