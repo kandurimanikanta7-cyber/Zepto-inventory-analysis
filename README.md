@@ -69,7 +69,6 @@ The first stage of the project focused on preparing the raw data for analysis.
 
 ### 1. Identify NULL Values
 
-The PPT contains a query checking NULL values in the available product fields.
 
 ```sql
 SELECT * FROM zeptoo
@@ -83,9 +82,8 @@ WHERE name IS NULL
  OR ...;
 ```
 
-> **Output:** The PPT output shows the column headers with no returned data rows, indicating that no matching NULL records were returned by this check. The screenshot in the PPT is cropped at the end of the query, so the final condition is not reproduced here as an invented statement.
+> **Output:** No matching NULL records were returned by this check.
 
-**PPT evidence:**
 
 #### SQL Query
 ```sql
@@ -106,7 +104,6 @@ Category | name | mrp | discountPercent | availableQuantity | discountedSellingP
 (No rows returned)
 ```
 
-> The final condition of the query is not visible in the PPT screenshot, so it has not been reconstructed here.
 
 ---
 
@@ -179,7 +176,6 @@ Health & Hygiene
 Biscuits
 ```
 
-> The project identifies 14 categories; the displayed PPT output lists the categories above.
 
 ---
 
@@ -215,7 +211,6 @@ FALSE | 3274
 TRUE | 453
 ```
 
-> The PPT screenshot shows 3,274 in-stock and 453 out-of-stock products.
 
 ---
 
@@ -269,7 +264,6 @@ Godrej Yummiez Chicken Breakfast Salami | 6
 Prasuma Vegetable Momos | 6
 ```
 
-> The PPT displays these repeated product names and SKU counts.
 
 ---
 
@@ -321,7 +315,6 @@ Fruits & Vegetables | Broccoli | 9 | 16 | 3 | 8 | 500 | FALSE | 500
 Fruits & Vegetables | Sapota | 30 | 16 | 3 | 25 | 348 | FALSE | 6
 ```
 
-> The PPT output demonstrates that the price values are represented in Indian Rupees after conversion.
 
 ---
 
@@ -410,7 +403,6 @@ Kelloggs Corn Flakes With Real Strawberry Pure | 265
 Del Monte Pitted Green Olives | 250
 ```
 
-> The full query returned 453 out-of-stock products; the PPT displays the highest-MRP portion of the result. Two products in the dataset have MRP above ₹500 and are out of stock.
 
 ---
 
@@ -445,7 +437,7 @@ ORDER BY total_revenue;
 | Cooking Essentials | **337,131** |
 | Munchies | **337,131** |
 
-**Key Insight:** **Cooking Essentials** and **Munchies** were the highest revenue-generating categories in the displayed output, at approximately **₹3.37 lakh each**.
+**Key Insight:** **Cooking Essentials** and **Munchies** were the highest revenue-generating categories in the output, at approximately **₹3.37 lakh each**.
 
 > Revenue logic used in the project: `Discounted Selling Price × Available Quantity`.
 
@@ -756,7 +748,7 @@ ORDER BY total_weight DESC;
 | Biscuits | 84,431 |
 | Meats, Fish & Eggs | 48,016 |
 
-**Key Insight:** Cooking Essentials had the highest displayed inventory weight at **1,404,326g (≈1,404kg)**. The PPT summarizes this as approximately **1,405kg**.
+**Key Insight:** Cooking Essentials had the highest displayed inventory weight at **1,404,326g (≈1,404kg)**. This is approximately **1,405kg**.
 
 #### SQL Query
 ```sql
@@ -802,7 +794,7 @@ Meats, Fish & Eggs | 48016
 
 ### Revenue
 - **14 product categories** were analyzed.
-- **Cooking Essentials** and **Munchies** showed the highest estimated revenue in the displayed output at approximately **₹3.37 lakh each**.
+- **Cooking Essentials** and **Munchies** showed the highest estimated revenue in the output at approximately **₹3.37 lakh each**.
 
 ### Product Value
 - **2,660 products** above 100g were compared using price-per-gram analysis.
@@ -896,7 +888,6 @@ Zepto-Inventory-Analysis/
 └── zepto_inventory_dataset.xlsx
 ``` 
 
-> Query and output results are presented directly as text/code blocks in this README, so no screenshot assets are required.
 
 ---
 
