@@ -1,11 +1,13 @@
-#  Zepto Inventory Analysis using SQL
+# Zepto Inventory Analysis using SQL
 
-SQL • MySQL • Data Cleaning • Inventory Analysis • Business Insights
-A portfolio project analyzing Zepto inventory data to understand pricing, discounts, stock availability, revenue potential, and inventory distribution.
+<p align="center">
+ <b>SQL • MySQL • Data Cleaning • Inventory Analysis • Business Insights</b><br>
+ A portfolio project analyzing Zepto inventory data to understand pricing, discounts, stock availability, revenue potential, and inventory distribution.
+</p>
 
 ---
 
-##  Project Overview
+## Project Overview
 
 Zepto is an Indian quick-commerce company that delivers groceries and everyday essentials through a mobile application. Its inventory contains products across multiple categories with different prices, discounts, quantities, weights, and stock statuses.
 
@@ -15,7 +17,7 @@ The project covers **3,732 raw product records across 9 columns and 14 categorie
 
 ---
 
-##  Project Objectives
+## Project Objectives
 
 - Clean and prepare the raw inventory dataset.
 - Identify missing values, duplicates, and invalid records.
@@ -30,7 +32,7 @@ The project covers **3,732 raw product records across 9 columns and 14 categorie
 
 ---
 
-## ️ Dataset
+## Dataset
 
 | Metric | Value |
 |---|---:|
@@ -61,7 +63,7 @@ The project covers **3,732 raw product records across 9 columns and 14 categorie
 
 ---
 
-#  Data Cleaning & Preparation
+# Data Cleaning & Preparation
 
 The first stage of the project focused on preparing the raw data for analysis.
 
@@ -72,22 +74,39 @@ The PPT contains a query checking NULL values in the available product fields.
 ```sql
 SELECT * FROM zeptoo
 WHERE name IS NULL
-   OR mrp IS NULL
-   OR discountpercent IS NULL
-   OR availablequantity IS NULL
-   OR discountedsellingprice IS NULL
-   OR weightingms IS NULL
-   OR outofstock IS NULL
-   OR ...;
+ OR mrp IS NULL
+ OR discountpercent IS NULL
+ OR availablequantity IS NULL
+ OR discountedsellingprice IS NULL
+ OR weightingms IS NULL
+ OR outofstock IS NULL
+ OR ...;
 ```
 
 > **Output:** The PPT output shows the column headers with no returned data rows, indicating that no matching NULL records were returned by this check. The screenshot in the PPT is cropped at the end of the query, so the final condition is not reproduced here as an invented statement.
 
 **PPT evidence:**
 
-![Q1 Query](assets/q01_query.png)
+#### SQL Query
+```sql
+SELECT * FROM zeptoo
+WHERE name IS NULL
+ OR mrp IS NULL
+ OR discountpercent IS NULL
+ OR availablequantity IS NULL
+ OR discountedsellingprice IS NULL
+ OR weightingms IS NULL
+ OR outofstock IS NULL
+ OR ...
+```
 
-![Q1 Output](assets/q01_output.png)
+#### Output
+```text
+Category | name | mrp | discountPercent | availableQuantity | discountedSellingPrice | weightInGms | outOfStock | quantity
+(No rows returned)
+```
+
+> The final condition of the query is not visible in the PPT screenshot, so it has not been reconstructed here.
 
 ---
 
@@ -100,9 +119,26 @@ LIMIT 10;
 
 **Output:** 10 sample records were displayed from the dataset.
 
-![Q2 Query](assets/q02_query.png)
+#### SQL Query
+```sql
+SELECT * FROM zeptoo
+LIMIT 10;
+```
 
-![Q2 Output](assets/q02_output.png)
+#### Output
+```text
+Category | name | mrp | discountPercent | availableQuantity | discountedSellingPrice | weightInGms | outOfStock | quantity
+Fruits & Vegetables | Onion | 25 | 16 | 3 | 21 | 1000 | FALSE | 1
+Fruits & Vegetables | Tomato Hybrid | 42 | 16 | 3 | 35 | 1000 | FALSE | 1
+Fruits & Vegetables | Tender Coconut | 51 | 15 | 3 | 43 | 58 | FALSE | 1
+Fruits & Vegetables | CorianderLeaves | 20 | 15 | 3 | 17 | 100 | FALSE | 100
+Fruits & Vegetables | Ladies Finger | 14 | 14 | 3 | 12 | 250 | FALSE | 250
+Fruits & Vegetables | Potato | 35 | 17 | 3 | 29 | 1000 | FALSE | 1
+Fruits & Vegetables | Lemon | 75 | 16 | 3 | 63 | 200 | FALSE | 200
+Fruits & Vegetables | Watermelon | 58 | 15 | 3 | 9 | 58 | FALSE | 1
+Fruits & Vegetables | Capsicum Green | 23 | 17 | 3 | 19 | 250 | FALSE | 250
+Fruits & Vegetables | Chilli Green | 19 | 15 | 5 | 16 | 100 | FALSE | 100
+```
 
 ---
 
@@ -116,9 +152,34 @@ GROUP BY category;
 
 **Output:** The analysis identified **14 product categories**.
 
-![Q3 Query](assets/q03_query.png)
+#### SQL Query
+```sql
+SELECT DISTINCT category
+FROM zeptoo
+GROUP BY category;
+```
 
-![Q3 Output](assets/q03_output.png)
+#### Output
+```text
+category
+-------------------------
+Fruits & Vegetables
+Cooking Essentials
+Munchies
+Dairy, Bread & Batter
+Beverages
+Packaged Food
+Ice Cream & Desserts
+Chocolates & Candies
+Meats, Fish & Eggs
+Personal Care
+Paan Corner
+Home & Cleaning
+Health & Hygiene
+Biscuits
+```
+
+> The project identifies 14 categories; the displayed PPT output lists the categories above.
 
 ---
 
@@ -139,9 +200,22 @@ GROUP BY outofstock;
 
 **Key insight:** 453 products were out of stock, approximately **12%** of the raw dataset.
 
-![Q4 Query](assets/q04_query.png)
+#### SQL Query
+```sql
+SELECT outofstock, COUNT(*)
+FROM zeptoo
+GROUP BY outofstock;
+```
 
-![Q4 Output](assets/q04_output.png)
+#### Output
+```text
+outofstock | count(*)
+-----------+--------
+FALSE | 3274
+TRUE | 453
+```
+
+> The PPT screenshot shows 3,274 in-stock and 453 out-of-stock products.
 
 ---
 
@@ -157,9 +231,45 @@ ORDER BY COUNT(*) DESC;
 
 **Output:** The query returned product names appearing multiple times, along with their number of SKUs.
 
-![Q5 Query](assets/q05_query.png)
+#### SQL Query
+```sql
+SELECT name, COUNT(*) AS "number of SKUs"
+FROM zeptoo
+GROUP BY name
+HAVING COUNT(*) > 1
+ORDER BY COUNT(*) DESC;
+```
 
-![Q5 Output](assets/q05_output.png)
+#### Output
+```text
+name | number of SKUs
+-------------------------------------------------+---------------
+Arden Eggs White | 10
+Saffola Veggie Twist Masala Oats | 10
+Quaker Oats | 10
+Sunfeast YiPPee! Pasta Treat - Sour Cream Onion | 10
+Sunfeast YiPPee! Magic Masala Noodles | 10
+Mother's Recipe Tamarind Paste | 10
+Amul Delicious Fat Spread - Cholesterol Free | 10
+Kellogg's Real Almond & Honey Corn Flakes | 9
+Amul Fresh Cream | 8
+iD Idli & Dosa Batter | 7
+Everest Garam Masala | 6
+Everest Chicken Masala | 6
+Everest Kitchen King Masala | 6
+Godrej Yummiez Chicken Nuggets | 6
+Zorabian Chicken Smoked Ham | 6
+Godrej Yummiez Chilli Chicken Sausages | 6
+Everest Tandoori Chicken Masala | 6
+Godrej Yummiez Chicken Punjabi Tikka | 6
+Maggi Magic Cubes Extra Chicken | 6
+Yummiez Chicken Garlic Fingers Pouch | 6
+Zorabian Chicken Kheema Parathas | 6
+Godrej Yummiez Chicken Breakfast Salami | 6
+Prasuma Vegetable Momos | 6
+```
+
+> The PPT displays these repeated product names and SKU counts.
 
 ---
 
@@ -168,7 +278,7 @@ ORDER BY COUNT(*) DESC;
 ```sql
 UPDATE zeptoo
 SET mrp = mrp / 100.0,
-    discountedsellingprice = discountedsellingprice / 100.0;
+ discountedsellingprice = discountedsellingprice / 100.0;
 
 SELECT mrp, discountedsellingprice
 FROM zeptoo;
@@ -176,15 +286,48 @@ FROM zeptoo;
 
 **Output:** Product MRP and discounted selling prices were displayed in **Indian Rupees (₹)**.
 
-![Q6 Query](assets/q06_query.png)
+#### SQL Query
+```sql
+UPDATE zeptoo
+SET mrp = mrp / 100.0,
+ discountedsellingprice = discountedsellingprice / 100.0;
 
-![Q6 Output](assets/q06_output.png)
+SELECT mrp, discountedsellingprice
+FROM zeptoo;
+```
+
+#### Output
+```text
+Category | name | mrp | discountPercent | availableQuantity | discountedSellingPrice | weightInGms | outOfStock | quantity
+Fruits & Vegetables | Onion | 25 | 16 | 3 | 21 | 1000 | FALSE | 1
+Fruits & Vegetables | Tomato Hybrid | 42 | 16 | 3 | 35 | 1000 | FALSE | 1
+Fruits & Vegetables | Tender Coconut | 51 | 15 | 3 | 43 | 58 | FALSE | 1
+Fruits & Vegetables | CorianderLeaves | 20 | 15 | 3 | 17 | 100 | FALSE | 100
+Fruits & Vegetables | Ladies Finger | 14 | 14 | 3 | 12 | 250 | FALSE | 250
+Fruits & Vegetables | Potato | 35 | 17 | 3 | 29 | 1000 | FALSE | 1
+Fruits & Vegetables | Lemon | 75 | 16 | 3 | 63 | 200 | FALSE | 200
+Fruits & Vegetables | Watermelon | 58 | 15 | 3 | 9 | 58 | FALSE | 1
+Fruits & Vegetables | Capsicum Green | 23 | 17 | 3 | 19 | 250 | FALSE | 250
+Fruits & Vegetables | Chilli Green | 19 | 15 | 3 | 16 | 100 | FALSE | 100
+Fruits & Vegetables | Banana Robusta | 29 | 17 | 3 | 24 | 348 | FALSE | 6
+Fruits & Vegetables | Garlic Indian | 11 | 18 | 3 | 9 | 100 | FALSE | 100
+Fruits & Vegetables | Cauliflower | 26 | 15 | 3 | 22 | 58 | FALSE | 1
+Fruits & Vegetables | Ginger | 14 | 14 | 3 | 12 | 200 | FALSE | 200
+Fruits & Vegetables | Spinach | 19 | 15 | 3 | 16 | 250 | FALSE | 250
+Fruits & Vegetables | Muskmelon | 42 | 16 | 3 | 35 | 58 | FALSE | 1
+Fruits & Vegetables | Cabbage | 15 | 13 | 3 | 13 | 58 | FALSE | 1
+Fruits & Vegetables | Methi | 30 | 16 | 3 | 25 | 250 | FALSE | 250
+Fruits & Vegetables | Broccoli | 9 | 16 | 3 | 8 | 500 | FALSE | 500
+Fruits & Vegetables | Sapota | 30 | 16 | 3 | 25 | 348 | FALSE | 6
+```
+
+> The PPT output demonstrates that the price values are represented in Indian Rupees after conversion.
 
 ---
 
-#  Business Analysis & SQL Queries
+# Business Analysis & SQL Queries
 
-## 7.  Top 10 Best-Value Products by Discount
+## 7. Top 10 Best-Value Products by Discount
 
 **Business Question:** Find the top 10 best-value products based on discount percentage.
 
@@ -199,13 +342,33 @@ LIMIT 10;
 
 **Insight:** The analysis identified the Top 10 best-value products based on discount percentage.
 
-![Q7 Query](assets/q07_query.png)
+#### SQL Query
+```sql
+SELECT DISTINCT name, mrp, discountpercent
+FROM zeptoo
+ORDER BY discountpercent DESC
+LIMIT 10;
+```
 
-![Q7 Output](assets/q07_output.png)
+#### Output
+```text
+name | mrp | discountpercent
+------------------------------------------------------------+-----+----------------
+Dukes Waffy Chocolate Wafers | 45 | 51
+Dukes Waffy Orange Wafers | 45 | 51
+Dukes Waffy Strawberry Wafers | 45 | 51
+Ceres Foods Fish Mustard Instant Liquid Masala | 220 | 50
+Ceres Foods Laal Maas Instant Liquid Masala | 220 | 50
+Ceres Foods Nalli Nihari Instant Liquid Masala | 220 | 50
+Chef's Basket Durum Wheat Elbow Pasta | 160 | 50
+Chef's Basket Durum Wheat Fusilli Pasta | 160 | 50
+Chef's Basket Durum Wheat Penne Pasta | 160 | 50
+Dukes Waffy Chocolate Wafer Rolls | 150 | 50
+```
 
 ---
 
-## 8.  High-MRP Products That Are Out of Stock
+## 8. High-MRP Products That Are Out of Stock
 
 **Business Question:** What are the products with high MRP but out of stock?
 
@@ -222,19 +385,42 @@ ORDER BY mrp DESC;
 
 This highlights products that may require additional inventory attention.
 
-![Q8 Query](assets/q08_query.png)
+#### SQL Query
+```sql
+SELECT DISTINCT name, mrp
+FROM zeptoo
+WHERE outofstock = 'true'
+ORDER BY mrp DESC;
+```
 
-![Q8 Output](assets/q08_output.png)
+#### Output
+```text
+name | mrp
+-------------------------------------------------------+-----
+Patanjali Cow's Ghee | 565
+MamyPoko Pants Standard Diapers, Extra Large... | 399
+Aashirvaad Atta With Multigrains | 315
+Everest Kashmiri Lal Chilli Powder | 310
+Hershey's Cocoa + Almond Spread | 295
+Madhur Pure And Hygienic Sugar | 295
+MOZZARELLA Block Cheese | 295
+Godrej Real Good Chicken Boneless Cubes | 275
+Zorabian Chicken Cubes | 270
+Kelloggs Corn Flakes With Real Strawberry Pure | 265
+Del Monte Pitted Green Olives | 250
+```
+
+> The full query returned 453 out-of-stock products; the PPT displays the highest-MRP portion of the result. Two products in the dataset have MRP above ₹500 and are out of stock.
 
 ---
 
-## 9.  Estimated Revenue by Category
+## 9. Estimated Revenue by Category
 
 **Business Question:** Calculate estimated revenue for each category.
 
 ```sql
 SELECT category,
-       SUM(discountedSellingPrice * availableQuantity) AS total_revenue
+ SUM(discountedSellingPrice * availableQuantity) AS total_revenue
 FROM zeptoo
 GROUP BY category
 ORDER BY total_revenue;
@@ -263,13 +449,38 @@ ORDER BY total_revenue;
 
 > Revenue logic used in the project: `Discounted Selling Price × Available Quantity`.
 
-![Q9 Query](assets/q09_query.png)
+#### SQL Query
+```sql
+SELECT category,
+ SUM(discountedSellingPrice * availableQuantity) AS total_revenue
+FROM zeptoo
+GROUP BY category
+ORDER BY total_revenue;
+```
 
-![Q9 Output](assets/q09_output.png)
+#### Output
+```text
+category | total_revenue (₹)
+----------------------------+------------------
+Fruits & Vegetables | 10846
+Meats, Fish & Eggs | 20693
+Biscuits | 25019
+Dairy, Bread & Batter | 55051
+Beverages | 55051
+Health & Hygiene | 64180
+Home & Cleaning | 122661
+Packaged Food | 224385
+Ice Cream & Desserts | 224385
+Chocolates & Candies | 224385
+Personal Care | 270849
+Paan Corner | 270849
+Cooking Essentials | 337131
+Munchies | 337131
+```
 
 ---
 
-## 10.  Products with MRP > ₹500 and Discount < 10%
+## 10. Products with MRP > ₹500 and Discount < 10%
 
 **Business Question:** Find products where MRP is greater than ₹500 and discount is less than 10%.
 
@@ -277,7 +488,7 @@ ORDER BY total_revenue;
 SELECT DISTINCT name, mrp, discountpercent
 FROM zeptoo
 WHERE mrp > 500
-  AND discountPercent < 10
+ AND discountPercent < 10
 ORDER BY mrp DESC, discountpercent DESC;
 ```
 
@@ -285,17 +496,50 @@ ORDER BY mrp DESC, discountpercent DESC;
 
 This helps identify relatively expensive products with limited discounts.
 
-![Q10 Query](assets/q10_query.png)
+#### SQL Query
+```sql
+SELECT DISTINCT name, mrp, discountpercent
+FROM zeptoo
+WHERE mrp > 500
+ AND discountPercent < 10
+ORDER BY mrp DESC, discountpercent DESC;
+```
 
-![Q10 Output](assets/q10_output.png)
+#### Output
+```text
+name | mrp | discountpercent
+------------------------------------------------------------+-----+----------------
+Dhara Kachi Ghani Mustard Oil Jar | 1250 | 8
+Saffola Gold (Jar) | 1240 | 0
+Dhara Filtered Groundnut Oil (Jar) | 1050 | 1
+Fortune Rice Bran Health Oil | 1050 | 1
+Dhara Filtered Groundnut Oil (Jar) | 1050 | 0
+Fortune Soyabean Oil | 1005 | 0
+Fortune Sunlite Refined Sunflower (Jar) | 925 | 0
+Surf Excel Matic Powder Front Load | 810 | 7
+Surf Excel Matic Top Load | 720 | 9
+Pedigree Puppy Dry Dog Food Food Chicken & Milk | 690 | 6
+Pedigree Dog Food Adult Meat & Rice | 660 | 7
+Lizol Double Concentrate Disinfectant Floor Cleaner | 650 | 8
+Nestle Nestle Nan Pro Follow-Up Formula | 650 | 0
+Dove Daily Shine Shampoo | 630 | 0
+L'Oreal Paris Excellence Creme Hair Color | 620 | 0
+L'Oreal Paris Excellence Creme Hair Color, 3Dar... | 620 | 0
+L'Oreal Paris Excellence Creme Hair Color, 4Nat... | 620 | 0
+L'Oreal Paris Excellence Creme Hair Color, 4.25... | 620 | 0
+Nestle Nan Pro 4 Follow Up Formula Powder For... | 620 | 0
+Pediasure Premium Chocolate Powdered Health... | 610 | 0
+```
+
+> **Result:** 82 products met the criteria in the project analysis.
 
 ---
 
-## 11.  Top 5 Categories by Average Discount
+## 11. Top 5 Categories by Average Discount
 
 ```sql
 SELECT category,
-       AVG(discountPercent) AS avg_discount
+ AVG(discountPercent) AS avg_discount
 FROM zeptoo
 GROUP BY category
 ORDER BY AVG(discountPercent) DESC
@@ -314,19 +558,36 @@ LIMIT 5;
 
 **Key Insight:** **Fruits & Vegetables** had the highest average discount at approximately **15.5%**.
 
-![Q11 Query](assets/q11_query.png)
+#### SQL Query
+```sql
+SELECT category,
+ AVG(discountPercent) AS avg_discount
+FROM zeptoo
+GROUP BY category
+ORDER BY AVG(discountPercent) DESC
+LIMIT 5;
+```
 
-![Q11 Output](assets/q11_output.png)
+#### Output
+```text
+category | avg_discount
+----------------------------+-------------
+Fruits & Vegetables | 15.4624
+Meats, Fish & Eggs | 11.0317
+Packaged Food | 8.3247
+Ice Cream & Desserts | 8.3247
+Chocolates & Candies | 8.3247
+```
 
 ---
 
-## 12. ️ Price per Gram for Products Above 100g
+## 12. Price per Gram for Products Above 100g
 
 ```sql
 SELECT DISTINCT name,
-       discountedSellingPrice,
-       weightingms,
-       ROUND(discountedSellingPrice / weightingms, 2) AS price_per_gram
+ discountedSellingPrice,
+ weightingms,
+ ROUND(discountedSellingPrice / weightingms, 2) AS price_per_gram
 FROM zeptoo
 WHERE weightingms > 100
 ORDER BY price_per_gram;
@@ -342,24 +603,57 @@ ORDER BY price_per_gram;
 Price per Gram = Selling Price / Weight in Grams
 ```
 
-![Q12 Query](assets/q12_query.png)
+#### SQL Query
+```sql
+SELECT DISTINCT name,
+ discountedSellingPrice,
+ weightingms,
+ ROUND(discountedSellingPrice / weightingms, 2) AS price_per_gram
+FROM zeptoo
+WHERE weightingms > 100
+ORDER BY price_per_gram;
+```
 
-![Q12 Output](assets/q12_output.png)
+#### Output
+```text
+name | discountedSellingPrice | weightingms | price_per_gram
+------------------------------------------+------------------------+-------------+---------------
+Aashirvaad Iodised Salt | 19 | 1000 | 0.02
+Onion | 21 | 1000 | 0.02
+Onion | 57 | 3000 | 0.02
+Shubh kart - Nirmal sugandhi mogra ... | 28 | 1160 | 0.02
+Tata Salt | 24 | 1000 | 0.02
+Vicks Cough Drops Menthol | 20 | 1160 | 0.02
+Baby Potato | 16 | 500 | 0.03
+Beetroot | 13 | 500 | 0.03
+Carrot | 15 | 500 | 0.03
+Potato | 29 | 1000 | 0.03
+Potato | 84 | 3000 | 0.03
+Raw Banana | 17 | 500 | 0.03
+Shubh kart - Tejas Twisted Cotton Wicks | 28 | 1000 | 0.03
+Aashirvaad Atta | 10000 | 10000 | 0.04
+Beetroot | 5 | 250 | 0.04
+Capsicum | 21 | 500 | 0.04
+Carrot | 11 | 250 | 0.04
+Pillsbury Chakki Fresh Atta | 375 | 10000 | 0.04
+```
+
+> **Result:** 2,660 products weighing more than 100g were compared in the project.
 
 ---
 
-## 13. ️ Product Weight Segmentation
+## 13. Product Weight Segmentation
 
 **Business Question:** Group products into Low, Medium, and Bulk categories.
 
 ```sql
 SELECT DISTINCT category,
-       weightingms,
-       CASE
-           WHEN weightingms < 1000 THEN 'low'
-           WHEN weightingms < 5000 THEN 'medium'
-           ELSE 'bulk'
-       END AS weight_category
+ weightingms,
+ CASE
+ WHEN weightingms < 1000 THEN 'low'
+ WHEN weightingms < 5000 THEN 'medium'
+ ELSE 'bulk'
+ END AS weight_category
 FROM zeptoo
 ORDER BY weightingms DESC;
 ```
@@ -381,17 +675,63 @@ ORDER BY weightingms DESC;
 | Bulk | **126** |
 | **Total** | **3,731** |
 
-![Q13 Query](assets/q13_query.png)
+#### SQL Query
+```sql
+SELECT DISTINCT category, weightingms,
+ CASE
+ WHEN weightingms < 1000 THEN 'low'
+ WHEN weightingms < 5000 THEN 'medium'
+ ELSE 'bulk'
+ END AS weight_category
+FROM zeptoo
+ORDER BY weightingms DESC;
+```
 
-![Q13 Output](assets/q13_output.png)
+#### Output
+```text
+category | weightingms | weight_category
+----------------------------+-------------+----------------
+Cooking Essentials | 10000 | bulk
+Munchies | 10000 | bulk
+Cooking Essentials | 5000 | bulk
+Munchies | 5000 | bulk
+Home & Cleaning | 4000 | medium
+Chocolates & Candies | 3000 | medium
+Fruits & Vegetables | 3000 | medium
+Home & Cleaning | 3000 | medium
+Ice Cream & Desserts | 3000 | medium
+Packaged Food | 3000 | medium
+Cooking Essentials | 2000 | medium
+Home & Cleaning | 2000 | medium
+Munchies | 2000 | medium
+Home & Cleaning | 1900 | medium
+Chocolates & Candies | 1500 | medium
+Home & Cleaning | 1500 | medium
+Ice Cream & Desserts | 1500 | medium
+Munchies | 1500 | medium
+Paan Corner | 1500 | medium
+Packaged Food | 1500 | medium
+Personal Care | 1500 | medium
+Chocolates & Candies | 1200 | medium
+```
+
+#### Dataset-level summary
+```text
+Weight Segment | Products
+---------------+---------
+Low | 2114
+Medium | 1491
+Bulk | 126
+Total | 3731
+```
 
 ---
 
-## 14.  Total Inventory Weight per Category
+## 14. Total Inventory Weight per Category
 
 ```sql
 SELECT category,
-       SUM(weightingms * availablequantity) AS total_weight
+ SUM(weightingms * availablequantity) AS total_weight
 FROM zeptoo
 GROUP BY category
 ORDER BY total_weight DESC;
@@ -418,13 +758,38 @@ ORDER BY total_weight DESC;
 
 **Key Insight:** Cooking Essentials had the highest displayed inventory weight at **1,404,326g (≈1,404kg)**. The PPT summarizes this as approximately **1,405kg**.
 
-![Q14 Query](assets/q14_query.png)
+#### SQL Query
+```sql
+SELECT category,
+ SUM(weightingms * availablequantity) AS total_weight
+FROM zeptoo
+GROUP BY category
+ORDER BY total_weight DESC;
+```
 
-![Q14 Output](assets/q14_output.png)
+#### Output
+```text
+category | total_weight (g)
+----------------------------+----------------
+Cooking Essentials | 1404326
+Munchies | 1404326
+Packaged Food | 490797
+Ice Cream & Desserts | 490797
+Chocolates & Candies | 490797
+Home & Cleaning | 373161
+Personal Care | 348187
+Paan Corner | 348187
+Dairy, Bread & Batter | 143735
+Beverages | 143735
+Health & Hygiene | 142904
+Fruits & Vegetables | 91794
+Biscuits | 84431
+Meats, Fish & Eggs | 48016
+```
 
 ---
 
-#  Key Business Insights
+# Key Business Insights
 
 ### Inventory
 - **453 products** were out of stock, representing approximately **12%** of the raw dataset.
@@ -448,7 +813,7 @@ ORDER BY total_weight DESC;
 
 ---
 
-#  Business Value
+# Business Value
 
 The analysis can support business decisions in several areas:
 
@@ -464,7 +829,7 @@ The analysis can support business decisions in several areas:
 
 ---
 
-#  SQL Concepts Demonstrated
+# SQL Concepts Demonstrated
 
 This project demonstrates practical use of:
 
@@ -491,60 +856,51 @@ This project demonstrates practical use of:
 
 ---
 
-#  Project Workflow
+# Project Workflow
 
 ```text
 Raw Zepto Inventory Dataset
-            ↓
-      Data Inspection
-            ↓
-      NULL & Duplicate Checks
-            ↓
-      Data Cleaning
-            ↓
-      Paise → INR Conversion
-            ↓
-     Stock Availability Analysis
-            ↓
+ ↓
+ Data Inspection
+ ↓
+ NULL & Duplicate Checks
+ ↓
+ Data Cleaning
+ ↓
+ Paise → INR Conversion
+ ↓
+ Stock Availability Analysis
+ ↓
  Pricing & Discount Analysis
-            ↓
-     Revenue Estimation
-            ↓
+ ↓
+ Revenue Estimation
+ ↓
  Price-per-Gram Analysis
-            ↓
+ ↓
  Weight Segmentation
-            ↓
+ ↓
 Inventory Weight by Category
-            ↓
-      Business Insights
+ ↓
+ Business Insights
 ```
 
 ---
 
-#  Recommended GitHub Repository Structure
+# Recommended GitHub Repository Structure
 
 ```text
 Zepto-Inventory-Analysis/
 │
-├──  README.md
-├── ️ zepto_inventory_analysis.sql
-├──  zepto_inventory_dataset.xlsx
-│
-└──  assets/
-    ├── q01_query.png
-    ├── q01_output.png
-    ├── q02_query.png
-    ├── q02_output.png
-    ├── ...
-    ├── q14_query.png
-    └── q14_output.png
-```
+├── README.md
+├── zepto_inventory_analysis.sql
+└── zepto_inventory_dataset.xlsx
+``` 
 
-> The `assets` folder contains the query and output screenshots extracted from the project PPT. Keep this folder in the same repository as `README.md` so the images render correctly on GitHub.
+> Query and output results are presented directly as text/code blocks in this README, so no screenshot assets are required.
 
 ---
 
-#  How to Use the Project
+# How to Use the Project
 
 ### 1. Clone the repository
 
@@ -565,15 +921,15 @@ Create a table with the required fields:
 
 ```sql
 CREATE TABLE zepto_inventory (
-    Category VARCHAR(255),
-    name VARCHAR(255),
-    mrp INT,
-    discountPercent INT,
-    availableQuantity INT,
-    discountedSellingPrice INT,
-    weightInGms INT,
-    outOfStock BOOLEAN,
-    quantity INT
+ Category VARCHAR(255),
+ name VARCHAR(255),
+ mrp INT,
+ discountPercent INT,
+ availableQuantity INT,
+ discountedSellingPrice INT,
+ weightInGms INT,
+ outOfStock BOOLEAN,
+ quantity INT
 );
 ```
 
@@ -589,7 +945,7 @@ The queries cover data cleaning, transformation, inventory analysis, pricing, di
 
 ---
 
-#  Conclusion
+# Conclusion
 
 This project demonstrates how **SQL can be used to solve practical business problems**, not just perform basic database queries.
 
@@ -601,7 +957,7 @@ The analysis highlights opportunities to improve **inventory availability, prici
 
 ## ‍ Author
 
-**Kanduri Manikanta**  
+**Kanduri Manikanta** 
 MBA – Finance & Business Analytics
 
 ### Skills Demonstrated
@@ -610,7 +966,7 @@ MBA – Finance & Business Analytics
 
 ---
 
-### ️ Disclaimer
+### Disclaimer
 
 This is a **portfolio/learning project** based on the provided Zepto inventory dataset. The estimated revenue and other analytical figures are derived from the supplied dataset and should **not be interpreted as official Zepto business data**.
 
